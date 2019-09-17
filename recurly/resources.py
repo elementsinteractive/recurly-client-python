@@ -22,8 +22,6 @@ class Site(Resource):
         Site ID
     mode : str
         Mode
-    public_api_key : str
-        This value is used to configure RecurlyJS to submit tokenized billing information.
     settings : Settings
     subdomain : str
     updated_at : datetime
@@ -37,7 +35,6 @@ class Site(Resource):
         "features": list,
         "id": str,
         "mode": str,
-        "public_api_key": str,
         "settings": "Settings",
         "subdomain": str,
         "updated_at": datetime,
@@ -122,8 +119,6 @@ class Account(Resource):
     Attributes
     ----------
     address : Address
-    bill_to : str
-        An enumerable describing the billing behavior of the account, specifically whether the account is self-paying or will rely on the parent account to pay.
     billing_info : BillingInfo
     cc_emails : str
         Additional email address that should receive account correspondence. These should be separated only by commas. These CC emails will receive all emails that the `email` field also receives.
@@ -137,15 +132,11 @@ class Account(Resource):
         If present, when the account was last marked inactive.
     email : str
         The email address used for communicating with this customer. The customer will also use this email address to log into your hosted account management pages. This value does not need to be unique.
-    exemption_certificate : str
-        The tax exemption certificate number for the account. If the merchant has an integration for the Vertex tax provider, this optional value will be sent in any tax calculation requests for the account.
     first_name : str
     hosted_login_token : str
         The unique token for automatically logging the account in to the hosted management pages. You may automatically log the user into their hosted management pages by directing the user to: `https://{subdomain}.recurly.com/account/{hosted_login_token}`.
     id : str
     last_name : str
-    parent_account_id : str
-        The UUID of the parent account associated with this account.
     preferred_locale : str
         Used to determine the language and locale of emails sent on behalf of the merchant to the customer.
     shipping_addresses : :obj:`list` of :obj:`ShippingAddress`
@@ -164,7 +155,6 @@ class Account(Resource):
 
     schema = {
         "address": "Address",
-        "bill_to": str,
         "billing_info": "BillingInfo",
         "cc_emails": str,
         "code": str,
@@ -173,12 +163,10 @@ class Account(Resource):
         "custom_fields": ["CustomField"],
         "deleted_at": datetime,
         "email": str,
-        "exemption_certificate": str,
         "first_name": str,
         "hosted_login_token": str,
         "id": str,
         "last_name": str,
-        "parent_account_id": str,
         "preferred_locale": str,
         "shipping_addresses": ["ShippingAddress"],
         "state": str,
@@ -437,28 +425,16 @@ class AccountMini(Resource):
     """
     Attributes
     ----------
-    bill_to : str
     code : str
         The unique identifier of the account.
-    company : str
     email : str
         The email address used for communicating with this customer.
     first_name : str
     id : str
     last_name : str
-    parent_account_id : str
     """
 
-    schema = {
-        "bill_to": str,
-        "code": str,
-        "company": str,
-        "email": str,
-        "first_name": str,
-        "id": str,
-        "last_name": str,
-        "parent_account_id": str,
-    }
+    schema = {"code": str, "email": str, "first_name": str, "id": str, "last_name": str}
 
 
 class AccountBalance(Resource):
@@ -872,7 +848,7 @@ class Invoice(Resource):
     Attributes
     ----------
     account : AccountMini
-    address : InvoiceAddress
+    address : Address
     balance : float
         The outstanding balance remaining on this invoice.
     closed_at : datetime
@@ -935,7 +911,7 @@ class Invoice(Resource):
 
     schema = {
         "account": "AccountMini",
-        "address": "InvoiceAddress",
+        "address": "Address",
         "balance": float,
         "closed_at": datetime,
         "collection_method": str,
@@ -966,49 +942,6 @@ class Invoice(Resource):
         "updated_at": datetime,
         "vat_number": str,
         "vat_reverse_charge_notes": str,
-    }
-
-
-class InvoiceAddress(Resource):
-    """
-    Attributes
-    ----------
-    city : str
-        City
-    company : str
-        Company
-    country : str
-        Country, 2-letter ISO code.
-    first_name : str
-        First name
-    last_name : str
-        Last name
-    name_on_account : str
-        Name on account
-    phone : str
-        Phone number
-    postal_code : str
-        Zip or postal code.
-    region : str
-        State or province.
-    street1 : str
-        Street 1
-    street2 : str
-        Street 2
-    """
-
-    schema = {
-        "city": str,
-        "company": str,
-        "country": str,
-        "first_name": str,
-        "last_name": str,
-        "name_on_account": str,
-        "phone": str,
-        "postal_code": str,
-        "region": str,
-        "street1": str,
-        "street2": str,
     }
 
 
